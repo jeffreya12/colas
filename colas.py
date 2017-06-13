@@ -1,53 +1,90 @@
-# Lista con las lineas del archivo
+import sys
+import numpy as np
+
 lines = []
-# Lista con cantidades de trabajo de cada cola
-a = []
-# Lista con cantidad de servidores de cada cola
-s = []
-# Lista con la tasa de atencion de cada cola
-miu = []
-# Lista con las probabilidades de pasar de una cola a otra
-p = []
-# Cantidad de colas
-m = int
+clientes = []                #a:j
+servidores = []              #s:i
+miu = []                     #u:i
+probabilidades = []          #P:ij
+colas = int                  #m
+pSalir = float               #probabilidades de salir
 
 # Funcion que lee el archivo y lo asigna al la lista lines
 def leerArchivo(nombreArchivo):
     file = open(nombreArchivo, 'r')
     global lines
     lines = file.readlines()
-    
-    print(lines)
+    print("\n\r\n")
+    #print(lines)
     
 # Funcion que inicializa los valores basicos necesarios
 def init():
-    global a, s, miu, p, m
-    m = int(lines[0].split()[0])
+
+    global clientes, servidores, miu, probabilidades, colas
+    colas = int(lines[0].split()[0])
+
     i = 1
     line = []
-    while (i <= m):
+    while (i <= colas):
         j = 0
         line = lines[i].split()
         while (j < 4):
             if (j == 0):
-                a.append(float(line[j]))
+                clientes.append(float(line[j]))
             elif (j == 1):
-                s.append(int(line[j]))
+                servidores.append(int(line[j]))
             elif (j == 2):
                 miu.append(float(line[j]))
             else:
-                p.append(list(map(float, line[j:])))
+                probabilidades.append([float(item) for item in line[j:]])
             j += 1
         i += 1
     
-
-        
+    print("Cantidad de colas:                       ",colas)
+    print("Servidores s:j:                          ",servidores)
+    print("Ts.. atencion por unidad de tiempo u:j   ",miu)
+    print("Trabajos/Clientes a:j:                   ",clientes)    
+    print("Probabilidades P:ij:                     ",probabilidades)
     
-leerArchivo("prueba.txt")
-init()
 
-print(m)
-print(a)
-print(s)
-print(miu)
-print(p)
+def calcularSalida():
+    valor = 0
+    
+    b = np.matrix(clientes) 
+    b = b.transpose()
+    b = -b
+    a = np.matrix(probabilidades)
+    
+    #Coloca en diagonal -1 en la matriz de a
+    for i in range(len(a)):
+        a[i,i] = -1
+	#Resuelve la ecuacion lineal para obtener valores de lambda
+    lamdas = np.linalg.solve(a,b)
+    for i in range(len(lamdas)):
+        print("Lambda ", i, ": ", lamdas[i,0])
+
+    for e in probabilidades:
+        for i in e:
+            valor+= float(i)
+
+    pSalir = 1 - valor
+    if pSalir < 0:
+        pSalir = 0
+    print("Probabilidad de salir q:i:               ",pSalir)
+        
+def main(): 
+    print("\r\n\r\n\r\n")
+    print("--------------------------\n--------------------------")
+    print("-Ordenando Datos:-")
+    print("--------------------------\n--------------------------\n")   
+    leerArchivo(sys.argv[1])
+    init()
+    calcularSalida()
+    print("\r\n\r\n\r\n")
+
+
+if __name__ == "__main__":
+    main()
+
+#Para correr archivo
+#python colas.py prueba.txt
