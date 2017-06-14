@@ -30,11 +30,11 @@ def init():
         line = lines[i].split()
         while (j < 4):
             if (j == 0):
-                clientes.append(float(line[j]))
+                servidores.append(float(line[j]))
             elif (j == 1):
-                servidores.append(int(line[j]))
-            elif (j == 2):
                 miu.append(float(line[j]))
+            elif (j == 2):
+                clientes.append(int(line[j]))
             else:
                 probabilidades.append([float(item) for item in line[j:]])
             j += 1
@@ -58,6 +58,7 @@ def calcularSalida():
     #Coloca en diagonal -1 en la matriz de a
     for i in range(len(a)):
         a[i,i] = -1
+	
 	#Resuelve la ecuacion lineal para obtener valores de lambda
     lamdas = np.linalg.solve(a,b)
     for i in range(len(lamdas)):
@@ -65,12 +66,16 @@ def calcularSalida():
 
     for e in probabilidades:
         for i in e:
-            valor+= float(i)
+            valor += float(i)
 
     pSalir = 1 - valor
     if pSalir < 0:
         pSalir = 0
+        
     print("Probabilidad de salir q:i:               ",pSalir)
+    
+    print(a)
+    print(b)
         
 def main(): 
     print("\r\n\r\n\r\n")
