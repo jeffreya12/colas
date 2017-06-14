@@ -9,7 +9,7 @@ miu = []                     #u:i
 probabilidades = []          #P:ij
 lambdas = []                 #lamba de cada col
 colas = int                  #m
-pSalir = float               #probabilidades de salir
+pSalir = []             	 #probabilidades de salir
 
 # Funcion que lee el archivo y lo asigna al la lista lines
 def leerArchivo(nombreArchivo):
@@ -22,6 +22,7 @@ def leerArchivo(nombreArchivo):
 # Funcion que inicializa los valores basicos necesarios
 def init():
 
+	random.seed()
 	global clientes, servidores, miu, probabilidades, colas
 	colas = int(lines[0].split()[0])
 
@@ -50,6 +51,9 @@ def init():
 	
 
 def calcularSalida():
+	
+	global lambdas, pSalir
+	
 	valor = 0
 	
 	b = np.matrix(clientes) 
@@ -62,30 +66,27 @@ def calcularSalida():
 		a[i,i] = -1
 	
 	#Resuelve la ecuacion lineal para obtener valores de lambda
-	global lambdas
 	lambdas = np.linalg.solve(a,b)
 	for i in range(len(lambdas)):
-		print("Lambda ", i, ": ", lambdas[i,0])
+		print("Lambda ", i + 1, ": ", lambdas[i,0])
 
 	for e in probabilidades:
 		for i in e:
 			valor += float(i)
 
-	pSalir = 1 - valor
-	if pSalir < 0:
-		pSalir = 0
+	for c in probabilidades:
+		pSalir.append(1 - sum(c))
 		
 	print("Probabilidad de salir q:i:               ",pSalir)
 	
-	print(a)
-	print(b)
+	# print(random.expovariate(lambdas[0, 0]))
 	
-	print(random.expovariate(clientes[0]))
+	# print(randomExponencial(clientes[0]))
 
 # Funcion que calcula el numero aleatorio exponencialmente distribuido
 def randomExponencial(lambd):
-	return random.expovariate(lambd)
-		
+	return -(np.log(random.random())) / lambd
+	
 def main(): 
 	print("\r\n\r\n\r\n")
 	print("--------------------------\n--------------------------")
