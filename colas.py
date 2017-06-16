@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import random
+import evento
 
 lines = []
 clientes = []                #a:j
