@@ -1,23 +1,22 @@
 import sys
 import numpy as np
 import random
-import evento
 import math
-import cola
+from evento import Evento
+from cola import Cola
 
 lines = []
 clientes = []                #a:j
 servidores = []              #s:i
 miu = []                     #u:i
 probabilidades = []          #P:ij
-lambdas = []                 #lamba de cada col
+lambdas = []                 #lamba de cada col ; se obtienen con sistema de ecuaciones
 colas = int                  #m
 pSalir = []             	 #probabilidades de salir
-
 instalaciones = []           #Contiene las colas reales (clase Cola).
 colaPrioridad = []           #Contiene eventos de la simulación.
 
-# Funcion que lee el archivo y lo asigna al la lista lines
+# Funcion que lee el archivo y lo asigna a la lista lines
 def leerArchivo(nombreArchivo):
 	file = open(nombreArchivo, 'r')
 	global lines
@@ -27,7 +26,6 @@ def leerArchivo(nombreArchivo):
 
 # Funcion que inicializa los valores basicos necesarios
 def init():
-
 	random.seed()
 	global clientes, servidores, miu, probabilidades, colas
 	colas = int(lines[0].split()[0])
@@ -135,7 +133,7 @@ def calcularSalida():
 	print("------------------------------------------------")
 	print("-Resultados según la teoría de redes de Jackson:-")
 	print("------------------------------------------------")
-	print("------------------------------------------------")
+	print("------------------------------------------------\r\n")
 
 	for i in range(len(lambdas)):
 		print("---------------Resultados de cola ", i + 1, "---------------")
@@ -168,7 +166,18 @@ def randomExponencial(lambd):
 	return -(np.log(random.random())) / lambd
 
 def initSimulacion(tiempo): #tiempo en segundos
-    print("Segundos que va a correr la simulación: " + str(tiempo))
+    cont = 0
+    print("\n\nSegundos que va a correr la simulación: " + str(tiempo) + "\n")
+    #Creamos las instalaciones del sistema
+    for e in range(colas):
+    	ins = Cola(servidores[e],miu[e],clientes[e])
+    	instalaciones.append(ins)
+    for e in instalaciones:
+    	cont+=1
+    	print("Cola" + str(cont))
+    	e.toString()
+
+
 
 
 def main(): 
@@ -180,7 +189,7 @@ def main():
     init()
     calcularSalida()
     initSimulacion(sys.argv[2])
-    print("\r\n\r\n\r\n")
+    print("\r\n")
 
 if __name__ == "__main__":
     main()

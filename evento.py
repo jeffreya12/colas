@@ -3,19 +3,16 @@ class Evento:
 	tiempo = 0
 	tipo = 0
 	procesado = None
-
-'''
-----Tipos de eventos----
 	
-	1. Entrada de un cliente a la cola n.
-		1.1. Espera en la cola.*
-		1.2. Empieza a ser atendido.*
-		1.3  Termina de ser atendido.
-			1.3.1  Pasa a la cola n.
-		1.4 Sale del sistema.
+	#Tipos de eventos----
+	#1. Entrada de un cliente a la cola n.
+		#1.1. Espera en la cola.*
+		#1.2. Empieza a ser atendido.*
+		#1.3  Termina de ser atendido.
+			#1.3.1  Pasa a la cola n.
+		#1.4 Sale del sistema.
 
-	* : Puede empezar de primero.
-'''
+	#* : Puede empezar de primero.
 
 	def __init__(self,ID,tiempo,tipo):
 		self.ID = ID
