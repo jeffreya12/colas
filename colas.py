@@ -3,6 +3,7 @@ import numpy as np
 import random
 import evento
 import math
+import cola
 
 lines = []
 clientes = []                #a:j
@@ -12,7 +13,9 @@ probabilidades = []          #P:ij
 lambdas = []                 #lamba de cada col
 colas = int                  #m
 pSalir = []             	 #probabilidades de salir
-colaPrioridad = []			 #Contiene eventos de la simulación.
+
+instalaciones = []           #Contiene las colas reales (clase Cola).
+colaPrioridad = []           #Contiene eventos de la simulación.
 
 # Funcion que lee el archivo y lo asigna al la lista lines
 def leerArchivo(nombreArchivo):
@@ -164,20 +167,23 @@ def calcularSalida():
 def randomExponencial(lambd):
 	return -(np.log(random.random())) / lambd
 
+def initSimulacion(tiempo): #tiempo en segundos
+    print("Segundos que va a correr la simulación: " + str(tiempo))
 
-def main():
-	print("\r\n\r\n\r\n")
-	print("--------------------------\n--------------------------")
-	print("-Ordenando Datos:-")
-	print("--------------------------\n--------------------------\n")
-	leerArchivo(sys.argv[1])
-	init()
-	calcularSalida()
-	print("\r\n\r\n\r\n")
 
+def main(): 
+    print("\r\n\r\n\r\n")
+    print("--------------------------\n--------------------------")
+    print("-Ordenando Datos:-")
+    print("--------------------------\n--------------------------\n")   
+    leerArchivo(sys.argv[1])
+    init()
+    calcularSalida()
+    initSimulacion(sys.argv[2])
+    print("\r\n\r\n\r\n")
 
 if __name__ == "__main__":
-	main()
+    main()
 
 #Para correr archivo
-#python colas.py prueba.txt
+#python colas.py prueba.txt 300
