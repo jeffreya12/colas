@@ -195,4 +195,4 @@ if __name__ == "__main__":
     main()
 
 #Para correr archivo
-#python colas.py prueba.txt 300
+#python jackson.py prueba.txt 300
