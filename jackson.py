@@ -13,8 +13,10 @@ probabilidades = []          #P:ij
 lambdas = []                 #lamba de cada col ; se obtienen con sistema de ecuaciones
 colas = int                  #m
 pSalir = []             	 #probabilidades de salir
+eventoCount = 0				 #Contador de la cantidad de eventos.
 instalaciones = []           #Contiene las colas reales (clase Cola).
 colaPrioridad = []           #Contiene eventos de la simulación.
+
 
 # Funcion que lee el archivo y lo asigna a la lista lines
 def leerArchivo(nombreArchivo):
@@ -182,6 +184,10 @@ Generar Eventos
     Para el  tiempo t = 0 deben generar el evento de 
     "entrada de una persona desde el exterior a la cola"
 '''
+	for e in instalaciones:
+		eventoCount += 1
+		#ID del evento, tiempo = 0, tipo Evento 1-5
+		evn = Evento(eventoCount,0,eventoCount)
 	
 
 

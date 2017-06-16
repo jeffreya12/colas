@@ -5,12 +5,12 @@ class Evento:
 	procesado = None
 	
 	#Tipos de eventos----
-	#1. Entrada de un cliente a la cola n.
-		#1.1. Espera en la cola.*
-		#1.2. Empieza a ser atendido.*
-		#1.3  Termina de ser atendido.
-			#1.3.1  Pasa a la cola n.
-		#1.4 Sale del sistema.
+	#1. Entrada de un cliente a la cola n. (1)
+		#1.1. Espera en la cola.*		   (2)
+		#1.2. Empieza a ser atendido.*     (3)
+		#1.3  Termina de ser atendido.     (4)
+			#1.3.1  Pasa a la cola n.      (1)
+		#1.4 Sale del sistema.			   (5)
 
 	#* : Puede empezar de primero.
 
