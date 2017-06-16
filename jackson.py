@@ -177,7 +177,12 @@ def initSimulacion(tiempo): #tiempo en segundos
     	print("Cola" + str(cont))
     	e.toString()
 
-
+'''
+Generar Eventos
+    Para el  tiempo t = 0 deben generar el evento de 
+    "entrada de una persona desde el exterior a la cola"
+'''
+	
 
 
 def main(): 

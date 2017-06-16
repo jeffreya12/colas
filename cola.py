@@ -20,9 +20,15 @@ class Cola:
             self.servidores.append(True)
             ite+=1
 
-    def generarLLegada():
+    def generarTiempoLLegada():
         x = random.randrange(2)
-        self.y = (log(x, 10)/self.pLambda)
+        self.y += (log(x, 10)/self.pLambda)
+
+    def obtenerTiempoServicio():
+        yServicio
+        x = random.randrange(2)
+        yServicio = (log(x, 10)/self.pMiu)
+        return yServicio
 
     def toString(self):
         print("Cantidad de servidores = " + str(self.cantServ) + "\n" + "Tasa media de atención = " + str(self.pMiu) + "\n" + "Tasa de Llegadas a la cola = " + str(self.pLambda) +"\nServidores de la cola = " + str(self.servidores) )
