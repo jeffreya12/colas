@@ -10,6 +10,7 @@ probabilidades = []          #P:ij
 lambdas = []                 #lamba de cada col
 colas = int                  #m
 pSalir = []             	 #probabilidades de salir
+colaPrioridad = []			 #Contiene eventos de la simulación.
 
 # Funcion que lee el archivo y lo asigna al la lista lines
 def leerArchivo(nombreArchivo):
@@ -86,6 +87,8 @@ def calcularSalida():
 # Funcion que calcula el numero aleatorio exponencialmente distribuido
 def randomExponencial(lambd):
 	return -(np.log(random.random())) / lambd
+
+def initSimulacion(int eventos):
 	
 def main(): 
 	print("\r\n\r\n\r\n")
