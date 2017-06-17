@@ -26,7 +26,7 @@ class Cola:
             x = random.uniform(0,1)
         self.y += (-math.log(x)/self.pLambda)
 
-    def obtenerTiempoServicio():
+    def obtenerTiempoServicio(self):
         yServicio = None
         x = random.uniform(0,1)
         while (x == 0.0):
