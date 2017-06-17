@@ -170,6 +170,7 @@ def randomExponencial(lambd):
 
 def initSimulacion(tiempo): #tiempo en segundos
     global eventoCount 
+    colaCount = 0
     #cont = 0
     print("\n\nSegundos que va a correr la simulación: " + str(tiempo) + "\n")
     #Creamos las instalaciones del sistema
@@ -186,16 +187,17 @@ def initSimulacion(tiempo): #tiempo en segundos
 #    "entrada de una persona desde el exterior a la cola"
 
     for c in instalaciones:
+        colaCount +=1
         eventoCount += 1
         #ID del evento, tiempo = 0, tipo Evento 1-5
-        evn = Evento(eventoCount,0,1)
+        evn = Evento(eventoCount,colaCount,0,1)
         colaPrioridad.append(evn)
         #generar tiempos de llegadas totales del exterior del sistema para cada cola.
         while(c.y <= tiempo):
             c.generarTiempoLLegada()
             if(c.y <= tiempo):
                 eventoCount += 1
-                nEvn = Evento(eventoCount,c.y,1)
+                nEvn = Evento(eventoCount,colaCount,c.y,1)
                 colaPrioridad.append(nEvn)
     ordernarColaPrioridad()
             
