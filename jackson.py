@@ -4,6 +4,7 @@ import random
 import math
 from evento import Evento
 from cola import Cola
+from operator import itemgetter, attrgetter
 
 lines = []
 clientes = []                #a:j
@@ -180,8 +181,6 @@ def initSimulacion(tiempo): #tiempo en segundos
 #        print("Cola" + str(cont))
 #        e.toString()
 
-
-
 #Generar Eventos
 #    Para el  tiempo t = 0 deben generar el evento de 
 #    "entrada de una persona desde el exterior a la cola"
@@ -198,11 +197,16 @@ def initSimulacion(tiempo): #tiempo en segundos
                 eventoCount += 1
                 nEvn = Evento(eventoCount,c.y,1)
                 colaPrioridad.append(nEvn)
+    ordernarColaPrioridad()
             
+    
+
+def ordernarColaPrioridad():
+    global colaPrioridad
+    colaPrioridad = sorted(colaPrioridad, key=attrgetter('tiempo', 'ID'))
+
     for even in colaPrioridad:
         print(even.toString())
-
-    
 
 
 def main(): 
