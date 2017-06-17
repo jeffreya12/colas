@@ -21,7 +21,7 @@ class Evento:
 		self.procesado = False
 
 	def toString(self):
-		print("\n\nID = " + str(self.ID) + "\n" + "Tiempo = " + str(self.tiempo) + "\n" + "Tipo = " + str(self.tipo))
+		print("\n\nID = " + str(self.ID) + "\n" + "Tiempo = " + str(self.tiempo) + "\n" + "Tipo = " + str(self.tipo) + "\nProcesado = " + str(self.procesado))
 
 	def procesar(self):
 		self.procesado = True

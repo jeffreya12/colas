@@ -20,14 +20,18 @@ class Cola:
             self.servidores.append(True)
             ite+=1
 
-    def generarTiempoLLegada():
-        x = random.randrange(2)
-        self.y += (log(x, 10)/self.pLambda)
+    def generarTiempoLLegada(self):
+        x = random.uniform(0,1)
+        while (x == 0.0):
+            x = random.uniform(0,1)
+        self.y += (-math.log(x)/self.pLambda)
 
     def obtenerTiempoServicio():
-        yServicio
-        x = random.randrange(2)
-        yServicio = (log(x, 10)/self.pMiu)
+        yServicio = None
+        x = random.uniform(0,1)
+        while (x == 0.0):
+            x = random.uniform(0,1)
+        yServicio = (-math.log(x)/self.pMiu)
         return yServicio
 
     def toString(self):
