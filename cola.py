@@ -15,10 +15,37 @@ class Cola:
         self.pLambda = pLambda
         self.servidores = []
         self.colaEspera = []
-        ite = 0
-        while(ite < self.cantServ):
-            self.servidores.append(True)
-            ite+=1
+        for e in range(cantServ):
+            self.servidores.append([None])
+
+    def pasarCliente(self,cliente):
+        indice = 0
+        for e in self.servidores:
+            if (e == [None]):
+                self.servidores[indice] = cliente
+                cliente.servidorActual = indice + 1
+                print("Empieza a ser atendido.")
+                print(self.servidores)
+                return
+            indice +=1
+        print("Servidores llenos espere en la cola.")
+        self.colaEspera.append(cliente)
+
+    def sacarCliente(self,IDCliente):
+        print("Algo")
+        indice = 0
+        for e in self.servidores:
+            print("Cliente en servidor: " + str(e))
+            print(IDCliente)
+            print(e.ID)
+            if (e.ID == IDCliente):
+                clnt = self.servidores.pop(indice)
+                self.servidores.append([None])
+                return clnt
+            else:
+                print("No hay cliente")
+                return -5
+            indice += 1
 
     def generarTiempoLLegada(self):
         x = random.uniform(0,1)
@@ -34,8 +61,8 @@ class Cola:
         yServicio = (-math.log(x)/self.pMiu)
         return yServicio
 
-    def agregarCliente(cliente):
-        colaEspera.append(cliente)
+    def agregarCliente(self,cliente):
+        self.colaEspera.append(cliente)
 
     def toString(self):
         print("Cantidad de servidores = " + str(self.cantServ) + "\n" + "Tasa media de atención = " + str(self.pMiu) + "\n" + "Tasa de Llegadas a la cola = " + str(self.pLambda) +"\nServidores de la cola = " + str(self.servidores) )

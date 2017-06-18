@@ -11,8 +11,8 @@ class Evento:
         #1.1. Espera en la cola.*          (-)
         #1.2. Empieza a ser atendido.*     (-)
         #1.3  Termina de ser atendido.     (2)
-            #1.3.1  Pasa a la cola n.      (1)
-        #1.4 Sale del sistema.             (3)
+            #1.3.1  Pasa a la cola n.      (3)
+        #1.4 Sale del sistema.             (4)
 
     #* : Puede empezar de primero.
 
