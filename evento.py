@@ -1,29 +1,31 @@
 class Evento:
     ID = 0
     tiempo = 0
-    tipo = 0
+    tipo = None
     procesado = None
-    colaObjetivo = None
+    colaMadre = None
+    IDCliente = None
     
     #Tipos de eventos----
     #1. Entrada de un cliente a la cola n. (1)
-        #1.1. Espera en la cola.*          (2)
-        #1.2. Empieza a ser atendido.*     (3)
-        #1.3  Termina de ser atendido.     (4)
+        #1.1. Espera en la cola.*          (-)
+        #1.2. Empieza a ser atendido.*     (-)
+        #1.3  Termina de ser atendido.     (2)
             #1.3.1  Pasa a la cola n.      (1)
-        #1.4 Sale del sistema.             (5)
+        #1.4 Sale del sistema.             (3)
 
     #* : Puede empezar de primero.
 
-    def __init__(self,ID,colaObjetivo,tiempo,tipo):
+    def __init__(self,ID,colaMadre,tiempo,tipo):
         self.ID = ID
-        self.colaObjetivo = colaObjetivo
+        self.colaMadre = colaMadre
         self.tiempo = tiempo
         self.tipo = tipo
         self.procesado = False
+        self.IDCliente = 0
 
     def toString(self):
-        return("\n\nID = " + str(self.ID) + "\n" + "Cola a la que se dirige = " + str(self.colaObjetivo) + "\n" + "Tiempo = " + str(self.tiempo) + "\n" + "Tipo = " + str(self.tipo) + "\nProcesado = " + str(self.procesado))
+        return("\n\nID = " + str(self.ID) + "\n" + "Pertenece a la cola = " + str(self.colaMadre) + "\n" + "Tiempo = " + str(self.tiempo) + "\n" + "Tipo = " + str(self.tipo) + "\nProcesado = " + str(self.procesado))
 
     def procesar(self):
         self.procesado = True

@@ -34,6 +34,9 @@ class Cola:
         yServicio = (-math.log(x)/self.pMiu)
         return yServicio
 
+    def agregarCliente(cliente):
+        colaEspera.append(cliente)
+
     def toString(self):
         print("Cantidad de servidores = " + str(self.cantServ) + "\n" + "Tasa media de atención = " + str(self.pMiu) + "\n" + "Tasa de Llegadas a la cola = " + str(self.pLambda) +"\nServidores de la cola = " + str(self.servidores) )
         '''for e in self.servidores:

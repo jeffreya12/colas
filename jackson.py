@@ -4,19 +4,23 @@ import random
 import math
 from evento import Evento
 from cola import Cola
+from cliente import Cliente
 from operator import itemgetter, attrgetter
 
-lines = []
-clientes = []                #a:j
-servidores = []              #s:i
-miu = []                     #u:i
-probabilidades = []          #P:ij
-lambdas = []                 #lamba de cada col ; se obtienen con sistema de ecuaciones
-colas = int                  #m
-pSalir = []                  #probabilidades de salir
-eventoCount = 0              #Contador de la cantidad de eventos.
-instalaciones = []           #Contiene las colas reales (clase Cola).
-colaPrioridad = []           #Contiene eventos de la simulación.
+lines          = []
+clientes       = []     #a:j
+servidores     = []     #s:i
+miu            = []     #u:i
+probabilidades = []     #P:ij
+lambdas        = []     #lamba de cada col ; se obtienen con sistema de ecuaciones
+colas          = int    #m
+pSalir         = []     #probabilidades de salir
+eventoCount    = 0      #Contador de la cantidad de eventos.
+clienteCount   = 0      #Contador de clientes.
+instalaciones  = []     #Contiene las colas reales (clase Cola).
+colaPrioridad  = []     #Contiene eventos de la simulación.
+bitacora       = []     #Datos de los eventos.
+clntsSistema   = []     #Clientes que se van generando y entran al sistema.
 
 
 # Funcion que lee el archivo y lo asigna a la lista lines
@@ -170,45 +174,88 @@ def randomExponencial(lambd):
 
 def initSimulacion(tiempo): #tiempo en segundos
     global eventoCount 
+    global clienteCount
+    global clntsSistema
+    global instalaciones
+    global servidores
+    global clientes
+    global miu
     colaCount = 0
-    #cont = 0
-    print("\n\nSegundos que va a correr la simulación: " + str(tiempo) + "\n")
+
+    print("\nTiempo que va a correr la simulación: " + str(tiempo) + "\n")
     #Creamos las instalaciones del sistema
     for e in range(colas):
         ins = Cola(servidores[e],miu[e],clientes[e])
         instalaciones.append(ins)
-#    for e in instalaciones:
-#        cont+=1
-#        print("Cola" + str(cont))
-#        e.toString()
 
-#Generar Eventos
-#    Para el  tiempo t = 0 deben generar el evento de 
-#    "entrada de una persona desde el exterior a la cola"
-
+    #Generar Eventos
+    #    Para el  tiempo t = 0 deben generar el evento de 
+    #    "entrada de una persona desde el exterior a la cola"
     for c in instalaciones:
         colaCount +=1
         eventoCount += 1
-        #ID del evento, tiempo = 0, tipo Evento 1-5
+        #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
         evn = Evento(eventoCount,colaCount,0,1)
         colaPrioridad.append(evn)
         #generar tiempos de llegadas totales del exterior del sistema para cada cola.
-        while(c.y <= tiempo):
+        '''while(c.y <= tiempo):
             c.generarTiempoLLegada()
             if(c.y <= tiempo):
                 eventoCount += 1
                 nEvn = Evento(eventoCount,colaCount,c.y,1)
-                colaPrioridad.append(nEvn)
+                colaPrioridad.append(nEvn)'''
     ordernarColaPrioridad()
+    cont = 0
+    while( len(colaPrioridad) > 0 ):
+        event = colaPrioridad[0]
+        largoCola = len(instalaciones[event.colaMadre-1].colaEspera)
+        #1: Llegada a la cola
+        if(event.tipo == 1):
+            #Verificar que el evento pertenezca a un cliente, sino se crea un cliente nuevo y se le asigna el evento.
+            if(event.IDCliente == 0):
+                clnt = Cliente(clienteCount)
+                clienteCount += 1
+                clnt.agregarEvento(event)
+                clntsSistema.append(clnt)
+
+            #Verificar si hay personas en la cola.
+            if(largoCola > 0):
+                #Debe de esperar en la cola.
+                instalaciones[event.colaMadre-1].agregarCliente(clntsSistema[0])
+                print("{} : Entra cliente en la cola {}, espera en la cola".format(event.tiempo,event.colaMadre) )
+            else:
+                #Pasar a servidor para ser atendido.
+                eventoCount += 1
+                tiempoServicio = instalaciones[event.colaMadre-1].obtenerTiempoServicio()
+                #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
+                eve = Evento(eventoCount,event.colaMadre,tiempoServicio,2)
+                colaPrioridad.append(eve)
+                print( "{} : Entra cliente en la cola {}, empieza a ser atendido".format(event.tiempo,event.colaMadre) )
+        #2: Termina de ser atendido.
+        elif(event.tipo == 2):
+            print("")
+        #3: Sale del sistema.
+        elif(event.tipo == 3):
+            print("")
+        else:
+            print("")
+
+        cont += 1
+        bitacora.append(colaPrioridad[0])
+        del colaPrioridad[0]
+
+    '''for even in bitacora:
+        print(even.toString())'''
             
-    
+def calcularStrTiempo(tiempo):
+    sttr = ""
+    return sttr  
 
 def ordernarColaPrioridad():
     global colaPrioridad
     colaPrioridad = sorted(colaPrioridad, key=attrgetter('tiempo', 'ID'))
 
-    for even in colaPrioridad:
-        print(even.toString())
+
 
 
 def main(): 
