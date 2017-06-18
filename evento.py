@@ -7,7 +7,7 @@ class Evento:
     IDCliente = None
     
     #Tipos de eventos----
-    #1. Entrada de un cliente a la cola n. (1)
+    #1. Entrada exterior de un cliente a la cola n. (1)
         #1.1. Espera en la cola.*          (-)
         #1.2. Empieza a ser atendido.*     (-)
         #1.3  Termina de ser atendido.     (2)
