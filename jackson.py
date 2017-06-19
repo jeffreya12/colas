@@ -146,10 +146,10 @@ def calcularSalida():
     for i in range(len(lambdas)):
         print("---------------Resultados de cola ", i + 1, "---------------")
         print("Lambda ", i + 1, ": ", lambdas[i,0])
-        #print("Lq     ", i + 1, ": ", Lq[i])
-        print("Lq      ", i + 1, ": ", L[i])
+        print("Lq     ", i + 1, ": ", Lq[i])
+        print("L      ", i + 1, ": ", L[i])
         print("Wq     ", i + 1, ": ", Wq[i])
-        #print("W      ", i + 1, ": ", W[i])
+        print("W      ", i + 1, ": ", W[i])
 
     for e in probabilidades:
         for i in e:
@@ -161,32 +161,15 @@ def calcularSalida():
     print("\nW:                                       ", sum(L)/sum(clientes))
     print("L:                                       ", sum(L))
     print("\nProbabilidad de salir q:i:               ",pSalir)
-    
-    print("\r\n\r\n\r\n")
-    print("-------------------------------------------------")
-    print("-------------------------------------------------")
-    print("-Resultados según la simulación:-")
-    print("-------------------------------------------------")
-    print("-------------------------------------------------\r\n")
 
-    for i in range(len(lambdas)):
-        print("---------------Resultados de cola ", i + 1, "---------------")
-        print("Lambda ", i + 1, ": ", lambdas[i,0])
-        #print("Lq     ", i + 1, ": ", Lq[i])
-        print("Lq      ", i + 1, ": ", L[i])
-        print("Wq     ", i + 1, ": ", Wq[i])
-        #print("W      ", i + 1, ": ", W[i])
+    # print(random.expovariate(lambdas[0, 0]))
 
-    for e in probabilidades:
-        for i in e:
-            valor += float(i)
+    # print(randomExponencial(clientes[0]))
 
-    for c in probabilidades:
-        pSalir.append(1 - sum(c))
 
-    print("\nW:                                       ", sum(L)/sum(clientes))
-    print("L:                                       ", sum(L))
-    print("\nProbabilidad de salir q:i:               ",pSalir)
+    # print(random.expovariate(lambdas[0, 0]))
+
+    # print(randomExponencial(clientes[0]))
 
 # Funcion que calcula el numero aleatorio exponencialmente distribuido
 def randomExponencial(lambd):
