@@ -199,8 +199,8 @@ def initSimulacion(tiempo): #tiempo en unidades.
         colaPrioridad.append(evn)
         #generar tiempos de llegadas totales del exterior del sistema para cada cola.
     ordernarColaPrioridad()
-
-    while( len(colaPrioridad) > 0 ):
+    cFin = 0
+    while( len(colaPrioridad) > 0 and (cFin < tiempo*20)):
         event = colaPrioridad[0]
         largoCola = len(instalaciones[event.colaMadre-1].colaEspera)
         event.procesar() #Cambia el estado de procesado de False a True del evento.
@@ -251,7 +251,10 @@ def initSimulacion(tiempo): #tiempo en unidades.
             #Sacar Cliente del servidor.
             clnt = instalaciones[event.colaMadre-1].sacarCliente(event.IDCliente)
             if(clnt==-5):
-                clnt = clntsSistema[0]
+                for c in instalaciones:
+                    for cliente in c.servidores:
+                        if (cliente.ID == event.IDCliente):
+                            clnt = cliente
             #Decidir cola a nueva a la que se debe ir.
             colaSig = colaSiguiente(event.colaMadre)
             #Averiguar si sale del sistema o pasa a cola nueva.
@@ -313,6 +316,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
         print("Borra de cola de prioridad")
         event = None
         eventosProcesados.append(colaPrioridad.pop(0))
+        cFin+=1
 
      
 def colaSiguiente(numCola):

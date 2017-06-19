@@ -44,7 +44,9 @@ class Cola:
                 return clnt
             else:
                 print("No hay cliente")
-                return -5
+                clnt = self.servidores.pop(indice)
+                self.servidores.append([None])
+                return clnt
             indice += 1
 
     def generarTiempoLLegada(self):
