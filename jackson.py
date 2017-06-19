@@ -21,6 +21,7 @@ instalaciones     = []     #Contiene las colas reales (clase Cola).
 colaPrioridad     = []     #Contiene eventos de la simulación.
 eventosProcesados = []     #Datos de los eventos.
 clntsSistema      = []     #Clientes que se van generando y entran al sistema.
+clientesViejos    = []
 
 
 # Funcion que lee el archivo y lo asigna a la lista lines
@@ -251,6 +252,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
             #print("Caso 2:")
             #Sacar Cliente del servidor.
             clnt = instalaciones[event.colaMadre-1].sacarCliente(event.IDCliente)
+            clientesViejos.append(clnt)
             if(clnt==-5):
                 for c in instalaciones:
                     for cliente in c.servidores:
