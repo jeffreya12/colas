@@ -117,7 +117,7 @@ def calcularSalida():
     #Calcula los Lq de cada servicio
     Lq = []
     for i in range(len(lambdas)):
-        Lq+= [calcularLongitudCola(lambdas[i,0], miu[i], servidores[i], p0[i])]
+        Lq += [calcularLongitudCola(lambdas[i,0], miu[i], servidores[i], p0[i])]
 
     #Calcula los L de cada servicio
     L = []
@@ -158,7 +158,9 @@ def calcularSalida():
     for c in probabilidades:
         pSalir.append(1 - sum(c))
 
-    print("Probabilidad de salir q:i:               ",pSalir)
+    print("\nW:                                       ", sum(L)/sum(clientes))
+    print("L:                                       ", sum(L))
+    print("\nProbabilidad de salir q:i:               ",pSalir)
 
     # print(random.expovariate(lambdas[0, 0]))
 
