@@ -186,6 +186,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
     global clientesViejos
     tiemposAtencion = []
     calculoCola = []
+    calculoSistema = []
     colaCount = 0
 
     print("\nTiempo que va a correr la simulación: " + str(tiempo) + "\n")
@@ -194,6 +195,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
         ins = Cola(servidores[e],miu[e],clientes[e])
         instalaciones.append(ins)
         calculoCola+= [{'sumatoria': 0, 'cantidad': 0}]
+        calculoSistema+= [{'sumatoria': 0, 'cantidad': 0}]
 
     #Generar Eventos
     #    Para el  tiempo t = 0 deben generar el evento de
@@ -211,10 +213,13 @@ def initSimulacion(tiempo): #tiempo en unidades.
     while( len(colaPrioridad) > 0 and (cFin < tiempo*40)):
         event = colaPrioridad[0]
         largoCola = len(instalaciones[event.colaMadre-1].colaEspera)
-        print("largo: ", largoCola)
-        #Realiza sumatoria dle tamanno de la cola
+        eventServ = instalaciones[event.colaMadre-1].servidores
+        #Realiza sumatoria del tamanno de la cola
         calculoCola[event.colaMadre-1]["sumatoria"]+= largoCola
         calculoCola[event.colaMadre-1]["cantidad"]+= 1
+        #Realiza sumatoria del tamanno del sistema
+        calculoSistema[event.colaMadre-1]["sumatoria"]+= len([item for item in eventServ if item != []]) + largoCola
+        calculoSistema[event.colaMadre-1]["cantidad"]+= 1
         event.procesar() #Cambia el estado de procesado de False a True del evento.
         #1: Llegada a la cola
         if(event.tipo == 1):
@@ -333,12 +338,32 @@ def initSimulacion(tiempo): #tiempo en unidades.
         eventosProcesados.append(colaPrioridad.pop(0))
         cFin+=1
 
+    #Calculo de datos obtenidos en la simulacion
     clientesViejos = set(clientesViejos)
     print(clientesViejos)
-    print("W: ",calcularTiempoColaSimulacion(clientesViejos, colas))
-    #Imprimir Lqs
+    Wq = calcularTiempoColaSimulacion(clientesViejos, colas)
+    W = calcularTiempoSistemaSimulacion(clientesViejos, colas)
+    L = []
+    Lq = []
     for i in range(len(calculoCola)):
-        print("L%i: %f" %(i, calculoCola[i]["sumatoria"]/calculoCola[i]["cantidad"]))
+        Lq+= [calculoCola[i]["sumatoria"]/calculoCola[i]["cantidad"]]
+    for i in range(len(calculoSistema)):
+        L+= [calculoSistema[i]["sumatoria"]/calculoSistema[i]["cantidad"]]
+    #Imprimir datos
+    print("\r\n\r\n\r\n")
+    print("-------------------------------------------------")
+    print("-------------------------------------------------")
+    print("-Resultados según la simulacion:-")
+    print("-------------------------------------------------")
+    print("-------------------------------------------------\r\n")
+    for i in range(colas):
+        print("---------------Resultados de cola ", i + 1, "---------------")
+        print("Lq     ", i + 1, ": ", Lq[i])
+        print("L      ", i + 1, ": ", L[i])
+        print("Wq     ", i + 1, ": ", Wq[i])
+        print("W      ", i + 1, ": ", W[i])
+
+
 
 def calcularTiempoColaSimulacion(clientes, colas):
     tiempo = []
@@ -347,21 +372,36 @@ def calcularTiempoColaSimulacion(clientes, colas):
     for cliente in clientes:
         eventos = cliente.eventos
         eventoAnterior = eventos[0]
-        print("-------------------")
-        suma = 0
         for evento in eventos:
             #Si son eventos en la misma cola
             #Si el evento anterior es entrar a cola y el evento actual ser atendido
-            if(eventoAnterior.tipo == 1):
-                suma+= 1
             if((eventoAnterior.tipo == 1 and evento.tipo == 2) and
             (eventoAnterior.colaMadre == evento.colaMadre)):
                 tiempo[evento.colaMadre-1]['sumatoria']+= (evento.tiempo - eventoAnterior.tiempo)
                 tiempo[evento.colaMadre-1]['cantidad']+= 1
             eventoAnterior = evento
-        print("suma: ", suma)
+    Wq = []
+    for i in range(colas):
+        Wq.append(tiempo[i]['sumatoria']/tiempo[i]['cantidad'])
+    return Wq
 
-    print(tiempo)
+def calcularTiempoSistemaSimulacion(clientes, colas):
+    tiempo = []
+    for i in range(colas):
+        tiempo.append({'cantidad': 0, 'sumatoria': 0})
+    for cliente in clientes:
+        eventos = cliente.eventos
+        for i in range(colas):
+            eventosCola = [item for item in eventos if item.colaMadre-1 == i]
+            if(eventosCola != []):
+                eventoInicio = eventosCola[0]
+                eventoFinal = eventosCola[-1]
+                tiempo[i]['sumatoria']+= (eventoFinal.tiempo - eventoInicio.tiempo)
+                tiempo[i]['cantidad']+= 1
+    W = []
+    for i in range(colas):
+        W.append(tiempo[i]['sumatoria']/tiempo[i]['cantidad'])
+    return W
 
 
 def colaSiguiente(numCola):
