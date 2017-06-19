@@ -1,6 +1,6 @@
 class Cliente:
     ID      = None
-    eventos = None #contiene los eventos relacionados. 
+    eventos = None #contiene los eventos relacionados.
     servidorActual = None
 
     def __init__(self,ID):
@@ -12,10 +12,12 @@ class Cliente:
     def agregarEvento(self,evento):
         evento.IDCliente = self.ID
         self.eventos.append(evento)
-    
+
     def obtenerTiempoSalida(self):
         tiempo = 0
         for e in self.eventos:
             tiempo += e.tiempo
         return tiempo
 
+    def __repr__(self):
+        return("ID: "+ str(self.ID))

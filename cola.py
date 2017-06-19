@@ -60,8 +60,8 @@ class Cola:
         x = random.uniform(0,1)
         while (x == 0.0):
             x = random.uniform(0,1)
-        yServicio = (-math.log(x)/self.pMiu)
-        return yServicio
+        self.y = self.y+(-math.log(x)/self.pMiu)
+        return self.y
 
     def agregarCliente(self,cliente):
         self.colaEspera.append(cliente)
@@ -71,6 +71,6 @@ class Cola:
         '''for e in self.servidores:
             if (e == True):
                 print("Servidor Libre")
-            else: 
+            else:
                 print("Servidor Ocupado")'''
         print("\n\n")

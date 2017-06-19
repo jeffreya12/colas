@@ -174,13 +174,16 @@ def randomExponencial(lambd):
     return -(np.log(random.random())) / lambd
 
 def initSimulacion(tiempo): #tiempo en unidades.
-    global eventoCount 
+    global eventoCount
     global clienteCount
     global clntsSistema
     global instalaciones
     global servidores
     global clientes
     global miu
+    global clientesViejos
+    tiemposAtencion = []
+    calculoCola = []
     colaCount = 0
 
     print("\nTiempo que va a correr la simulación: " + str(tiempo) + "\n")
@@ -188,9 +191,10 @@ def initSimulacion(tiempo): #tiempo en unidades.
     for e in range(colas):
         ins = Cola(servidores[e],miu[e],clientes[e])
         instalaciones.append(ins)
+        calculoCola+= [{'sumatoria': 0, 'cantidad': 0}]
 
     #Generar Eventos
-    #    Para el  tiempo t = 0 deben generar el evento de 
+    #    Para el  tiempo t = 0 deben generar el evento de
     #    "entrada de una persona desde el exterior a la cola"
     for c in instalaciones:
         colaCount +=1
@@ -205,6 +209,10 @@ def initSimulacion(tiempo): #tiempo en unidades.
     while( len(colaPrioridad) > 0 and (cFin < tiempo*40)):
         event = colaPrioridad[0]
         largoCola = len(instalaciones[event.colaMadre-1].colaEspera)
+        print("largo: ", largoCola)
+        #Realiza sumatoria dle tamanno de la cola
+        calculoCola[event.colaMadre-1]["sumatoria"]+= largoCola
+        calculoCola[event.colaMadre-1]["cantidad"]+= 1
         event.procesar() #Cambia el estado de procesado de False a True del evento.
         #1: Llegada a la cola
         if(event.tipo == 1):
@@ -225,6 +233,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
                 #Pasar cliente a servidor para ser atendido.
                 eventoCount += 1
                 tiempoServicio = instalaciones[event.colaMadre-1].obtenerTiempoServicio()
+                #tiemposAtencion[event.colaMadre-1]["cantidad"]+= 1
                 #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
                 eve = Evento(eventoCount,event.colaMadre,tiempoServicio,2)
                 clntsSistema[0].agregarEvento(eve) #Asigna el evento con el cliente.
@@ -263,7 +272,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
             #Averiguar si sale del sistema o pasa a cola nueva.
             if (colaSig == 0):
                 print( "{} : El Cliente termina de ser atendido en la cola {}, sale del sistema.".format(clnt.obtenerTiempoSalida(),event.colaMadre) )
-            else: 
+            else:
                 print("{} : Cliente termina de ser atendido en la cola {}, pasa a la cola {}".format(clnt.obtenerTiempoSalida(),event.colaMadre,colaSig))
                 eventoCount += 1
                 #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
@@ -276,13 +285,14 @@ def initSimulacion(tiempo): #tiempo en unidades.
                     #Pasar siguiente cliente de la cola al servidor.Generar Evento de atención.
                     eventoCount += 1
                     tiempoServicio = instalaciones[event.colaMadre-1].obtenerTiempoServicio()
+                    tiempoServicio = instalaciones[event.colaMadre-1].obtenerTiempoServicio()
                     #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
                     eve = Evento(eventoCount,event.colaMadre,tiempoServicio,2)
                     colaPrioridad.append(eve)
                     ordernarColaPrioridad()
                     instalaciones[event.colaMadre-1].colaEspera[0].agregarEvento(eve)#Asignar evento con cliente.
                     nClnt = instalaciones[event.colaMadre-1].colaEspera[0]
-                    instalaciones[event.colaMadre-1].pasarCliente(nClnt)        
+                    instalaciones[event.colaMadre-1].pasarCliente(nClnt)
         #3: Termina de ser atendido y pasa a la cola n.
         elif(event.tipo == 3):
             #print("Caso 3:")
@@ -321,7 +331,37 @@ def initSimulacion(tiempo): #tiempo en unidades.
         eventosProcesados.append(colaPrioridad.pop(0))
         cFin+=1
 
-     
+    clientesViejos = set(clientesViejos)
+    print(clientesViejos)
+    print("W: ",calcularTiempoColaSimulacion(clientesViejos, colas))
+    #Imprimir Lqs
+    for i in range(len(calculoCola)):
+        print("L%i: %f" %(i, calculoCola[i]["sumatoria"]/calculoCola[i]["cantidad"]))
+
+def calcularTiempoColaSimulacion(clientes, colas):
+    tiempo = []
+    for i in range(colas):
+        tiempo.append({'cantidad': 0, 'sumatoria': 0})
+    for cliente in clientes:
+        eventos = cliente.eventos
+        eventoAnterior = eventos[0]
+        print("-------------------")
+        suma = 0
+        for evento in eventos:
+            #Si son eventos en la misma cola
+            #Si el evento anterior es entrar a cola y el evento actual ser atendido
+            if(eventoAnterior.tipo == 1):
+                suma+= 1
+            if((eventoAnterior.tipo == 1 and evento.tipo == 2) and
+            (eventoAnterior.colaMadre == evento.colaMadre)):
+                tiempo[evento.colaMadre-1]['sumatoria']+= (evento.tiempo - eventoAnterior.tiempo)
+                tiempo[evento.colaMadre-1]['cantidad']+= 1
+            eventoAnterior = evento
+        print("suma: ", suma)
+
+    print(tiempo)
+
+
 def colaSiguiente(numCola):
     global probabilidades
     x = random.uniform(0,1)
@@ -332,11 +372,11 @@ def colaSiguiente(numCola):
     if(probabilidades[indexMin] == 0.0):
         return 0
     nCola = indexMin + 1
-    return nCola 
+    return nCola
 
 def calcularStrTiempo(tiempo):
     sttr = ""
-    return sttr  
+    return sttr
 
 def ordernarColaPrioridad():
     global colaPrioridad
@@ -345,16 +385,16 @@ def ordernarColaPrioridad():
 
 
 
-def main(): 
+def main():
     print("\r\n\r\n\r\n")
     print("--------------------------\n--------------------------")
     print("-Ordenando Datos:-")
-    print("--------------------------\n--------------------------\n")   
+    print("--------------------------\n--------------------------\n")
     leerArchivo(sys.argv[1])
     init()
-    calcularSalida()
     tiempoLimite = int(sys.argv[2])
     initSimulacion(tiempoLimite)
+    calcularSalida()
     print("\r\n")
 
 if __name__ == "__main__":
