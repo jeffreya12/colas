@@ -197,6 +197,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
         #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-3
         evn = Evento(eventoCount,colaCount,0,1)
         colaPrioridad.append(evn)
+        ordernarColaPrioridad()
         #generar tiempos de llegadas totales del exterior del sistema para cada cola.
     ordernarColaPrioridad()
     cFin = 0
@@ -206,13 +207,13 @@ def initSimulacion(tiempo): #tiempo en unidades.
         event.procesar() #Cambia el estado de procesado de False a True del evento.
         #1: Llegada a la cola
         if(event.tipo == 1):
-            print("Caso 1:")
+            #print("Caso 1:")
             #Verificar que el evento pertenezca a un cliente, sino se crea un cliente nuevo y se le asigna el evento.
             clnt = Cliente(clienteCount)
             clienteCount += 1
             clnt.agregarEvento(event)
             clntsSistema.append(clnt)
-            print(clntsSistema)
+            #print(clntsSistema)
             #Verificar si hay personas en la cola.
             if(largoCola > 0):
                 #Debe de esperar en la cola.
@@ -237,17 +238,17 @@ def initSimulacion(tiempo): #tiempo en unidades.
             cola.generarTiempoLLegada()
             #Generar evento de nueva llegada, si no supera el límite de tiempo.
             if(cola.y <= tiempo):
-                print("Crea llegada nueva")
+                #print("Crea llegada nueva")
                 eventoCount += 1
                 nEvn = Evento(eventoCount,event.colaMadre,cola.y,1)
-                print(nEvn.IDCliente)
+                #print(nEvn.IDCliente)
                 colaPrioridad.append(nEvn)
                 ordernarColaPrioridad()
 
         #2: Termina de ser atendido.
         #Aquí se puede procesar (generar bitácora) los eventos del cliente una vez que sale de la cola.
         elif(event.tipo == 2):
-            print("Caso 2:")
+            #print("Caso 2:")
             #Sacar Cliente del servidor.
             clnt = instalaciones[event.colaMadre-1].sacarCliente(event.IDCliente)
             if(clnt==-5):
@@ -282,7 +283,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
                     instalaciones[event.colaMadre-1].pasarCliente(nClnt)        
         #3: Termina de ser atendido y pasa a la cola n.
         elif(event.tipo == 3):
-            print("Caso 3:")
+            #print("Caso 3:")
             if(largoCola > 0):
                 #Debe de esperar en la cola.
                 print("{} : Entra cliente en la cola {}, espera en la cola".format(event.tiempo,event.colaMadre) )
@@ -304,16 +305,16 @@ def initSimulacion(tiempo): #tiempo en unidades.
             cola.generarTiempoLLegada()
             #Generar evento de nueva llegada, si no supera el límite de tiempo.
             if(cola.y <= tiempo):
-                print("Crea llegada nueva")
+                #print("Crea llegada nueva")
                 eventoCount += 1
                 nEvn = Evento(eventoCount,event.colaMadre,cola.y,1)
-                print(nEvn.IDCliente)
+                #print(nEvn.IDCliente)
                 colaPrioridad.append(nEvn)
                 ordernarColaPrioridad()
         else:
-            print("Caso X")
+            print("Caso X: Inexistente")
 
-        print("Borra de cola de prioridad")
+        #print("Borra de cola de prioridad")
         event = None
         eventosProcesados.append(colaPrioridad.pop(0))
         cFin+=1

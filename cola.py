@@ -24,26 +24,26 @@ class Cola:
             if (e == [None]):
                 self.servidores[indice] = cliente
                 cliente.servidorActual = indice + 1
-                print("Empieza a ser atendido.")
-                print(self.servidores)
+                #print("Empieza a ser atendido.")
+                #print(self.servidores)
                 return
             indice +=1
-        print("Servidores llenos espere en la cola.")
+        #print("Servidores llenos espere en la cola.")
         self.colaEspera.append(cliente)
 
     def sacarCliente(self,IDCliente):
         indice = 0
-        print("Servidores{}".format(self.servidores))
+        #print("Servidores{}".format(self.servidores))
         for e in self.servidores:
-            print("Cliente en servidor: " + str(e.ID))
-            print(IDCliente)
-            print(e.ID)
+            #print("Cliente en servidor: " + str(e.ID))
+            #print(IDCliente)
+            #print(e.ID)
             if (e.ID == IDCliente):
                 clnt = self.servidores.pop(indice)
                 self.servidores.append([None])
                 return clnt
             else:
-                print("No hay cliente")
+                #print("No hay cliente")
                 clnt = self.servidores.pop(indice)
                 self.servidores.append([None])
                 return clnt
