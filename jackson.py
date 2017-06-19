@@ -201,7 +201,7 @@ def initSimulacion(tiempo): #tiempo en unidades.
         #generar tiempos de llegadas totales del exterior del sistema para cada cola.
     ordernarColaPrioridad()
     cFin = 0
-    while( len(colaPrioridad) > 0 and (cFin < tiempo*20)):
+    while( len(colaPrioridad) > 0 and (cFin < tiempo*40)):
         event = colaPrioridad[0]
         largoCola = len(instalaciones[event.colaMadre-1].colaEspera)
         event.procesar() #Cambia el estado de procesado de False a True del evento.
