@@ -117,7 +117,7 @@ def calcularSalida():
     #Calcula los Lq de cada servicio
     Lq = []
     for i in range(len(lambdas)):
-        Lq+= [calcularLongitudCola(lambdas[i,0], miu[i], servidores[i], p0[i])]
+        Lq += [calcularLongitudCola(lambdas[i,0], miu[i], servidores[i], p0[i])]
 
     #Calcula los L de cada servicio
     L = []
@@ -146,10 +146,10 @@ def calcularSalida():
     for i in range(len(lambdas)):
         print("---------------Resultados de cola ", i + 1, "---------------")
         print("Lambda ", i + 1, ": ", lambdas[i,0])
-        print("Lq     ", i + 1, ": ", Lq[i])
-        print("L      ", i + 1, ": ", L[i])
+        #print("Lq     ", i + 1, ": ", Lq[i])
+        print("Lq      ", i + 1, ": ", L[i])
         print("Wq     ", i + 1, ": ", Wq[i])
-        print("W      ", i + 1, ": ", W[i])
+        #print("W      ", i + 1, ": ", W[i])
 
     for e in probabilidades:
         for i in e:
@@ -158,16 +158,35 @@ def calcularSalida():
     for c in probabilidades:
         pSalir.append(1 - sum(c))
 
-    print("Probabilidad de salir q:i:               ",pSalir)
+    print("\nW:                                       ", sum(L)/sum(clientes))
+    print("L:                                       ", sum(L))
+    print("\nProbabilidad de salir q:i:               ",pSalir)
+    
+    print("\r\n\r\n\r\n")
+    print("-------------------------------------------------")
+    print("-------------------------------------------------")
+    print("-Resultados según la simulación:-")
+    print("-------------------------------------------------")
+    print("-------------------------------------------------\r\n")
 
-    # print(random.expovariate(lambdas[0, 0]))
+    for i in range(len(lambdas)):
+        print("---------------Resultados de cola ", i + 1, "---------------")
+        print("Lambda ", i + 1, ": ", lambdas[i,0])
+        #print("Lq     ", i + 1, ": ", Lq[i])
+        print("Lq      ", i + 1, ": ", L[i])
+        print("Wq     ", i + 1, ": ", Wq[i])
+        #print("W      ", i + 1, ": ", W[i])
 
-    # print(randomExponencial(clientes[0]))
+    for e in probabilidades:
+        for i in e:
+            valor += float(i)
 
+    for c in probabilidades:
+        pSalir.append(1 - sum(c))
 
-    # print(random.expovariate(lambdas[0, 0]))
-
-    # print(randomExponencial(clientes[0]))
+    print("\nW:                                       ", sum(L)/sum(clientes))
+    print("L:                                       ", sum(L))
+    print("\nProbabilidad de salir q:i:               ",pSalir)
 
 # Funcion que calcula el numero aleatorio exponencialmente distribuido
 def randomExponencial(lambd):
