@@ -32,10 +32,10 @@ class Cola:
         self.colaEspera.append(cliente)
 
     def sacarCliente(self,IDCliente):
-        print("Algo")
         indice = 0
+        print("Servidores{}".format(self.servidores))
         for e in self.servidores:
-            print("Cliente en servidor: " + str(e))
+            print("Cliente en servidor: " + str(e.ID))
             print(IDCliente)
             print(e.ID)
             if (e.ID == IDCliente):

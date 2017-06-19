@@ -267,20 +267,46 @@ def initSimulacion(tiempo): #tiempo en unidades.
                 clnt.agregarEvento(eve)
                 instalaciones[colaSig-1].agregarCliente(clnt)
                 if(largoCola > 0):
-                    #Pasar siguiente cliente de la cola al servidor.
+                    #Pasar siguiente cliente de la cola al servidor.Generar Evento de atención.
                     eventoCount += 1
                     tiempoServicio = instalaciones[event.colaMadre-1].obtenerTiempoServicio()
                     #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
                     eve = Evento(eventoCount,event.colaMadre,tiempoServicio,2)
                     colaPrioridad.append(eve)
                     ordernarColaPrioridad()
-                    nClnt = instalaciones[event.colaMadre-1].colaEspera.pop(0)
-                    nClnt.agregarEvento(eve)#Asignar evento con cliente.
+                    instalaciones[event.colaMadre-1].colaEspera[0].agregarEvento(eve)#Asignar evento con cliente.
+                    nClnt = instalaciones[event.colaMadre-1].colaEspera[0]
                     instalaciones[event.colaMadre-1].pasarCliente(nClnt)        
         #3: Termina de ser atendido y pasa a la cola n.
         elif(event.tipo == 3):
             print("Caso 3:")
-
+            if(largoCola > 0):
+                #Debe de esperar en la cola.
+                print("{} : Entra cliente en la cola {}, espera en la cola".format(event.tiempo,event.colaMadre) )
+            else:
+                #Pasar cliente a servidor para ser atendido.
+                eventoCount += 1
+                tiempoServicio = instalaciones[event.colaMadre-1].obtenerTiempoServicio()
+                #ID del evento,Cola del evento, tiempo = 0, tipo Evento 1-4
+                eve = Evento(eventoCount,event.colaMadre,tiempoServicio,2)
+                cln = instalaciones[colaSig-1].colaEspera[0]
+                instalaciones[colaSig-1].colaEspera[0].agregarEvento(eve) #Asigna el evento con el cliente.
+                colaPrioridad.append(eve)
+                ordernarColaPrioridad()
+                print( "{} : Entra cliente en la cola {}, empieza a ser atendido".format(event.tiempo,event.colaMadre) )
+                #Pasamos el cliente al servidor y lo sacamos de la lista de clientes del sistema.
+                instalaciones[event.colaMadre-1].pasarCliente(cln)
+            #Generar siguiente llamada desde el exterior.
+            cola = instalaciones[event.colaMadre-1]
+            cola.generarTiempoLLegada()
+            #Generar evento de nueva llegada, si no supera el límite de tiempo.
+            if(cola.y <= tiempo):
+                print("Crea llegada nueva")
+                eventoCount += 1
+                nEvn = Evento(eventoCount,event.colaMadre,cola.y,1)
+                print(nEvn.IDCliente)
+                colaPrioridad.append(nEvn)
+                ordernarColaPrioridad()
         else:
             print("Caso X")
 
